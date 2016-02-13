@@ -59,7 +59,10 @@ def home():
 
     <b><code>/users/&lt;int:user_id&gt;</code></b><br>
     Description: Retrouve un utilisateur spécifique<br>
-    Méthode: GET<br><br>
+    Méthode: GET
+    <ul>
+        <li>status-id</li
+    </ul>
 
     """
 
@@ -168,10 +171,12 @@ def participations_for_users_gooddeed(user_id):
 def accept_gooddeed_participation(participation_id):
     connection = get_database_connection()
 
+    param_status_id = request.form['status-id']
+
     try:
         with connection.cursor() as cursor:
-            sql = "UPDATE Participations SET status_id=1 WHERE Participations.id=%s"
-            cursor.execute(sql, (participation_id))
+            sql = "UPDATE Participations SET status_id=%s WHERE Participations.id=%s"
+            cursor.execute(sql, (param_status_id, participation_id))
             connection.commit()
     finally:
         connection.close()
