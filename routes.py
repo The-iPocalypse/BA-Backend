@@ -28,6 +28,10 @@ def home():
     Description: Retourne toutes les bonnes actions qui n'ont pas reçu de postulations OU celles qui n'ont pas été encore acceptées (dont le statut n'est pas OK)<br>
     Méthode: GET<br><br>
 
+    <b>/participations</b><br>
+    Description: Permet l'ajout d'une participation. Le statut sera mis à Pending automatiquement<br>
+    Méthode: POST<br><br>
+
     """
 
 
