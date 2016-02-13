@@ -9,63 +9,8 @@ app.debug = True
 
 @app.route('/')
 def home():
-    return """
-    <h1>Méthodes permises:</h1>
-
-    <b><code>/users</b></code><br>
-    Description: Retourne tous les utilisateurs<br>
-    Méthode: GET<br><br>
-
-    <b><code>/participations&lt;user_id&gt;</code></b><br>
-    Description: Retourne toutes les bonnes actions auxquelles un utilisateur s'est inscrit<br>
-    Méthode: GET<br><br>
-
-    <b><code>/gooddeeds</code></b><br>
-    Description: Permet l'ajout d'une bonne action<br>
-    Méthode: POST<br>
-    Paramètres:
-    <ul>
-        <li>creator-user-id</li>
-        <li>title</li>
-        <li>description</li>
-        <li>address</li>
-        <li>start-date</li>
-        <li>end-date</li>
-        <li>latitude</li>
-        <li>longitude</li>
-    </ul>
-
-    <b><code>/gooddeeds-without-participation-ok</code></b><br>
-    Description: Retourne toutes les bonnes actions qui n'ont pas reçu de postulations OU celles qui n'ont pas été encore acceptées (dont le statut n'est pas OK)<br>
-    Méthode: GET<br><br>
-
-    <b><code>/participations</code></b><br>
-    Description: Permet l'ajout d'une participation. Le statut sera mis à Pending automatiquement<br>
-    Méthode: POST<br>
-    Paramètres:
-    <ul>
-        <li>user-id</li>
-        <li>good-deed-id</li>
-    </ul>
-
-    <b><code>/participations_for_users_gooddeed/&lt;int:user_id&gt;</code></b><br>
-    Description: Retourne la liste des personnes proposant leur aide à une bonne action pour un user préci<br>
-    Méthode: GET<br><br>
-
-    <b><code>/accept_gooddeed_participation/<int:participation_id>&lt;int:participation_id&gt;</code></b><br>
-    Description: Applique le statut OK à une participation<br>
-    Méthode: PUT<br><br>
-
-
-    <b><code>/users/&lt;int:user_id&gt;</code></b><br>
-    Description: Retrouve un utilisateur spécifique<br>
-    Méthode: GET
-    <ul>
-        <li>status-id</li
-    </ul>
-
-    """
-
+    with open('documentation.html', 'r') as doc:
+        return doc.read()
 
 @app.route('/users', methods=['GET'])
 def users():
