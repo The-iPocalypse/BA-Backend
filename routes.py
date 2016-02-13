@@ -13,20 +13,20 @@ def home():
     <h1>Méthodes permises:</h1>
 
     <b>/users</b><br>
-    Description: Retourne tous les utilisateurs<br><br>
-    Méthode: GET
+    Description: Retourne tous les utilisateurs<br>
+    Méthode: GET<br><br>
 
-    <b>/participations/<user_id></b><br>
+    <b>/participations<user_id></b><br>
     Description: Retourne toutes les bonnes actions auxquelles un utilisateur s'est inscrit<br>
-    Méthode: GET
+    Méthode: GET<br><br>
 
-    <b>/gooddeeds</b>
-    Description: Permet l'ajout d'une bonne action
-    Méthode: POST
+    <b>/gooddeeds</b><br>
+    Description: Permet l'ajout d'une bonne action<br>
+    Méthode: POST<br><br>
 
     <b>/gooddeeds-without-participation-ok</b><br>
-    Description: Retourne toutes les bonnes actions qui n'ont pas reçu de postulations OU celles qui n'ont pas été encore acceptées (dont le statut n'est pas OK)
-    Méthode: GET
+    Description: Retourne toutes les bonnes actions qui n'ont pas reçu de postulations OU celles qui n'ont pas été encore acceptées (dont le statut n'est pas OK)<br>
+    Méthode: GET<br><br>
 
     """
 
