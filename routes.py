@@ -14,9 +14,19 @@ def home():
 
     <b>/users</b><br>
     Description: Retourne tous les utilisateurs<br><br>
+    Méthode: GET
 
     <b>/participations/<user_id></b><br>
     Description: Retourne toutes les bonnes actions auxquelles un utilisateur s'est inscrit<br>
+    Méthode: GET
+
+    <b>/gooddeeds</b>
+    Description: Permet l'ajout d'une bonne action
+    Méthode: POST
+
+    <b>/gooddeeds-without-participation-ok</b><br>
+    Description: Retourne toutes les bonnes actions qui n'ont pas reçu de postulations OU celles qui n'ont pas été encore acceptées (dont le statut n'est pas OK)
+    Méthode: GET
 
     """
 
@@ -61,15 +71,6 @@ def gooddeeds():
     param_latitude = request.form['latitude']
     param_longitude = request.form['longitude']
 
-    print(param_creator_user_id)
-    print(param_title)
-    print(param_description)
-    print(param_address)
-    print(param_start_date)
-    print(param_end_date)
-    print(param_latitude)
-    print(param_longitude)
-
     try:
         with connection.cursor() as cursor:
             sql = "INSERT INTO Good_Deeds (title, description, address, start_date, end_date, creator_user_id, latitude, longitude) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
@@ -81,3 +82,16 @@ def gooddeeds():
         connection.close()
 
     return "success"
+
+@app.route('/gooddeeds-without-participation-ok', methods=['GET'])
+def gooddeeds_without_participation_ok():
+    connection = get_database_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT DISTINCT title, description, address, start_date, end_date, creator_user_id, latitude, longitude, Participations.status_id FROM Good_Deeds LEFT JOIN Participations ON Good_Deeds.id=Participations.good_deed_id WHERE Participations.status_id <> 1 OR Participations.status_id IS NULL"
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            return Response(json.dumps(result, ensure_ascii=False, indent=2).encode('utf8'),  mimetype='application/json', content_type='application/json; charset=utf-8')
+    finally:
+        connection.close()
