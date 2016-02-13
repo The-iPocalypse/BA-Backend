@@ -1,6 +1,6 @@
 import json
 
-from flask import Flask, Response
+from flask import Flask, Response, request
 from database import get_database_connection
 
 app = Flask(__name__)
@@ -18,8 +18,6 @@ def home():
     <b>/participations/<user_id></b><br>
     Description: Retourne toutes les bonnes actions auxquelles un utilisateur s'est inscrit<br>
 
-
-
     """
 
 
@@ -36,14 +34,6 @@ def users():
     finally:
         connection.close()
 
-class DateTimeEncoder(json.JSONEncoder):
-    def default(self, obj):
-       if hasattr(obj, 'isoformat'):
-           return obj.isoformat()
-       else:
-           return json.JSONEncoder.default(self, obj)
-
-
 @app.route('/participations/<int:user_id>', methods=['GET'])
 def user(user_id):
     connection = get_database_connection()
@@ -56,3 +46,38 @@ def user(user_id):
             return Response(json.dumps(result, ensure_ascii=False, indent=2).encode('utf8'),  mimetype='application/json', content_type='application/json; charset=utf-8')
     finally:
         connection.close()
+
+
+@app.route('/gooddeeds', methods=['POST'])
+def gooddeeds():
+    connection = get_database_connection()
+
+    param_creator_user_id = request.form['creator-user-id']
+    param_title = request.form['title']
+    param_description = request.form['description']
+    param_address = request.form['address']
+    param_start_date = request.form['start-date']
+    param_end_date = request.form['end-date']
+    param_latitude = request.form['latitude']
+    param_longitude = request.form['longitude']
+
+    print(param_creator_user_id)
+    print(param_title)
+    print(param_description)
+    print(param_address)
+    print(param_start_date)
+    print(param_end_date)
+    print(param_latitude)
+    print(param_longitude)
+
+    try:
+        with connection.cursor() as cursor:
+            sql = "INSERT INTO Good_Deeds (title, description, address, start_date, end_date, creator_user_id, latitude, longitude) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+            cursor.execute(sql, (param_title, param_description, param_address, param_start_date, param_end_date,
+                                 param_creator_user_id, param_latitude, param_longitude))
+
+            connection.commit()
+    finally:
+        connection.close()
+
+    return "success"
