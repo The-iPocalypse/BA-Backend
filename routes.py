@@ -52,6 +52,15 @@ def home():
     Description: Retourne la liste des personnes proposant leur aide à une bonne action pour un user préci<br>
     Méthode: GET<br><br>
 
+    <b><code>/accept_gooddeed_participation/<int:participation_id>&lt;int:participation_id&gt;</code></b><br>
+    Description: Applique le statut OK à une participation<br>
+    Méthode: PUT<br><br>
+
+
+    <b><code>/users/&lt;int:user_id&gt;</code></b><br>
+    Description: Retrouve un utilisateur spécifique<br>
+    Méthode: GET<br><br>
+
     """
 
 
@@ -148,6 +157,34 @@ def participations_for_users_gooddeed(user_id):
     try:
         with connection.cursor() as cursor:
             sql = "SELECT * FROM Participations INNER JOIN Good_Deeds ON Participations.good_deed_id = Good_Deeds.id WHERE Good_Deeds.creator_user_id =%s"
+            cursor.execute(sql, (user_id))
+            result = cursor.fetchall()
+            return Response(json.dumps(result, ensure_ascii=False, indent=2).encode('utf8'),  mimetype='application/json', content_type='application/json; charset=utf-8')
+    finally:
+        connection.close()
+
+
+@app.route('/accept_gooddeed_participation/<int:participation_id>', methods=['PUT'])
+def accept_gooddeed_participation(participation_id):
+    connection = get_database_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            sql = "UPDATE Participations SET status_id=1 WHERE Participations.id=%s"
+            cursor.execute(sql, (participation_id))
+            connection.commit()
+    finally:
+        connection.close()
+
+    return "success"
+
+@app.route('/users/<int:user_id>', methods=['GET'])
+def single_user(user_id):
+    connection = get_database_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT * FROM Users WHERE Users.id=%s"
             cursor.execute(sql, (user_id))
             result = cursor.fetchall()
             return Response(json.dumps(result, ensure_ascii=False, indent=2).encode('utf8'),  mimetype='application/json', content_type='application/json; charset=utf-8')
