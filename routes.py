@@ -118,7 +118,7 @@ def gooddeeds():
     finally:
         connection.close()
 
-    return "success"
+    return "", 200
 
 
 @app.route('/gooddeeds-without-participation-ok', methods=['GET'])
@@ -150,7 +150,7 @@ def create_participation():
     finally:
         connection.close()
 
-    return "success"
+    return "", 200
 
 
 @app.route('/participations_for_users_gooddeed/<int:user_id>', methods=['GET'])
@@ -181,7 +181,7 @@ def accept_gooddeed_participation(participation_id):
     finally:
         connection.close()
 
-    return "success"
+    return "", 200
 
 @app.route('/users/<int:user_id>', methods=['GET'])
 def single_user(user_id):
