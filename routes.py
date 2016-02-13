@@ -44,6 +44,7 @@ def users():
     finally:
         connection.close()
 
+
 @app.route('/participations/<int:user_id>', methods=['GET'])
 def user(user_id):
     connection = get_database_connection()
@@ -83,6 +84,7 @@ def gooddeeds():
 
     return "success"
 
+
 @app.route('/gooddeeds-without-participation-ok', methods=['GET'])
 def gooddeeds_without_participation_ok():
     connection = get_database_connection()
@@ -95,3 +97,21 @@ def gooddeeds_without_participation_ok():
             return Response(json.dumps(result, ensure_ascii=False, indent=2).encode('utf8'),  mimetype='application/json', content_type='application/json; charset=utf-8')
     finally:
         connection.close()
+
+
+@app.route('/participations', methods=['POST'])
+def create_participation():
+    connection = get_database_connection()
+
+    param_user_id = request.form['user-id']
+    param_deed_id = request.form['good-deed-id']
+
+    try:
+        with connection.cursor() as cursor:
+            sql = "INSERT INTO Participations (user_id, status_id, good_deed_id) VALUES (%s, %s, %s)"
+            cursor.execute(sql, (param_user_id, 2, param_deed_id))
+            connection.commit()
+    finally:
+        connection.close()
+
+    return "success"
