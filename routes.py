@@ -12,25 +12,29 @@ def home():
     return """
     <h1>Méthodes permises:</h1>
 
-    <b>/users</b><br>
+    <b><code>/users</b></code><br>
     Description: Retourne tous les utilisateurs<br>
     Méthode: GET<br><br>
 
-    <b>/participations<user_id></b><br>
+    <b><code>/participations&lt;user_id&gt;</code></b><br>
     Description: Retourne toutes les bonnes actions auxquelles un utilisateur s'est inscrit<br>
     Méthode: GET<br><br>
 
-    <b>/gooddeeds</b><br>
+    <b><code>/gooddeeds</code></b><br>
     Description: Permet l'ajout d'une bonne action<br>
     Méthode: POST<br><br>
 
-    <b>/gooddeeds-without-participation-ok</b><br>
+    <b><code>/gooddeeds-without-participation-ok</code></b><br>
     Description: Retourne toutes les bonnes actions qui n'ont pas reçu de postulations OU celles qui n'ont pas été encore acceptées (dont le statut n'est pas OK)<br>
     Méthode: GET<br><br>
 
-    <b>/participations</b><br>
+    <b><code>/participations</code></b><br>
     Description: Permet l'ajout d'une participation. Le statut sera mis à Pending automatiquement<br>
     Méthode: POST<br><br>
+
+    <b><code>/participations_for_users_gooddeed/&lt;int:user_id&gt;</code></b><br>
+    Description: Retourne la liste des personnes proposant leur aide à une bonne action pour un user préci<br>
+    Méthode: GET<br><br>
 
     """
 
@@ -119,3 +123,17 @@ def create_participation():
         connection.close()
 
     return "success"
+
+
+@app.route('/participations_for_users_gooddeed/<int:user_id>', methods=['GET'])
+def participations_for_users_gooddeed(user_id):
+    connection = get_database_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT * FROM Participations INNER JOIN Good_Deeds ON Participations.good_deed_id = Good_Deeds.id WHERE Good_Deeds.creator_user_id =%s"
+            cursor.execute(sql, (user_id))
+            result = cursor.fetchall()
+            return Response(json.dumps(result, ensure_ascii=False, indent=2).encode('utf8'),  mimetype='application/json', content_type='application/json; charset=utf-8')
+    finally:
+        connection.close()
