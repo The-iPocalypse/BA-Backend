@@ -22,7 +22,18 @@ def home():
 
     <b><code>/gooddeeds</code></b><br>
     Description: Permet l'ajout d'une bonne action<br>
-    Méthode: POST<br><br>
+    Méthode: POST<br>
+    Paramètres:
+    <ul>
+        <li>creator-user-id</li>
+        <li>title</li>
+        <li>description</li>
+        <li>address</li>
+        <li>start-date</li>
+        <li>end-date</li>
+        <li>latitude</li>
+        <li>longitude</li>
+    </ul>
 
     <b><code>/gooddeeds-without-participation-ok</code></b><br>
     Description: Retourne toutes les bonnes actions qui n'ont pas reçu de postulations OU celles qui n'ont pas été encore acceptées (dont le statut n'est pas OK)<br>
@@ -30,7 +41,12 @@ def home():
 
     <b><code>/participations</code></b><br>
     Description: Permet l'ajout d'une participation. Le statut sera mis à Pending automatiquement<br>
-    Méthode: POST<br><br>
+    Méthode: POST<br>
+    Paramètres:
+    <ul>
+        <li>user-id</li>
+        <li>good-deed-id</li>
+    </ul>
 
     <b><code>/participations_for_users_gooddeed/&lt;int:user_id&gt;</code></b><br>
     Description: Retourne la liste des personnes proposant leur aide à une bonne action pour un user préci<br>
